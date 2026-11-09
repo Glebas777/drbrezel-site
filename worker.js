@@ -30,7 +30,7 @@ export default {
             'Authorization': `Bearer ${env.ZVENO_API_KEY}`
           },
           body: JSON.stringify({
-            model: 'inclusionai/ling-3.0-flash-vl',
+            model: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
             messages: [
               { role: 'system', content: systemPrompt },
               ...recentHistory,
