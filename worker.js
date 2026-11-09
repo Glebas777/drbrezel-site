@@ -16,12 +16,19 @@ export default {
         const body = await request.json();
         const { message, history } = body;
 
-        const recentHistory = (history || []).slice(-6).map(msg => ({
-          role: msg.sender === 'user' ? 'user' : 'assistant',
-          content: msg.text || '...'
-        }));
+        // Очищаем историю (чтобы не было ошибок валидации)
+        const recentHistory = (history || []).slice(-6).map(msg => {
+          let text = msg.text;
+          if (typeof text !== 'string') text = String(text || '');
+          text = text.trim();
+          if (!text) text = '...';
+          return {
+            role: msg.sender === 'user' ? 'user' : 'assistant',
+            content: text
+          };
+        });
 
-        const systemPrompt = "Ты — Доктор Брезель, добрый дедушка-сыровар из магазина Dr. Brezel Gourmet. ПРАВИЛА: 1. Не здоровайся, если уже поздоровались. 2. Если спрашивают про покупку — говори: 'Просто нажмите кнопку Смотреть коллекцию на главной или зайдите в каталог'. 3. НЕ выдумывай телеграм-каналы, ссылки и скидки. 4. Отвечай кратко, 1-2 предложения.";
+        const systemPrompt = "Ты — Доктор Брезель, добрый дедушка-сыровар из магазина Dr. Brezel Gourmet. ПРАВИЛА: 1. Не здоровайся, если уже поздоровались. 2. Если спрашивают про покупку — говори: 'Просто нажмите кнопку Смотреть коллекцию на главной или зайдите в каталог'. 3. НЕ выдумывай телеграм-каналы, ссылки и скидки. 4. Отвечай кратко, 1-2 предложения. 5. Если спрашивают про конкретный сыр — скажи, что он есть в каталоге.";
 
         const zvenoRes = await fetch('https://api.zveno.ai/v1/chat/completions', {
           method: 'POST',
@@ -30,7 +37,7 @@ export default {
             'Authorization': `Bearer ${env.ZVENO_API_KEY}`
           },
           body: JSON.stringify({
-            model: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
+            model: 'minimax/minimax-m2.7', // НАША РОДНАЯ МОДЕЛЬ
             messages: [
               { role: 'system', content: systemPrompt },
               ...recentHistory,
@@ -54,7 +61,6 @@ export default {
       }
     }
 
-    // ... остальные маршруты (support) ...
     if (url.pathname === '/api/support' && request.method === 'POST') {
         const body = await request.json();
         const { message, sessionId, userEmail } = body;
