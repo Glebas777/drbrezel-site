@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dr. Brezel Gourmet | Личный кабинет</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Syne:wght@700&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .profile-layout { display: flex; gap: 40px; padding: 120px 0 80px; min-height: 100vh; max-width: 1400px; margin: 0 auto; padding-left: 40px; padding-right: 40px; }
+        .profile-sidebar { width: 280px; flex-shrink: 0; }
+        .profile-sidebar h2 { font-family: var(--font-heading); font-size: 32px; margin-bottom: 30px; }
+        .profile-nav { display: flex; flex-direction: column; gap: 10px; }
+        .profile-nav-btn { text-align: left; background: transparent; border: 1px solid transparent; color: var(--text-muted); padding: 15px 20px; border-radius: 12px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.3s; }
+        .profile-nav-btn:hover { background: rgba(255, 255, 255, 0.05); color: var(--text-main); }
+        .profile-nav-btn.active { background: var(--bg-card); border-color: var(--border); color: var(--accent); font-weight: 600; }
+        .profile-content { flex: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 40px; min-height: 500px; }
+        .profile-tab { display: none; }
+        .profile-tab.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-title { font-size: 28px; margin-bottom: 30px; font-family: var(--font-heading); }
+        .info-grid { display: grid; gap: 20px; margin-bottom: 30px; }
+        .info-item label { display: block; font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .info-item p { font-size: 18px; font-weight: 600; color: var(--text-main); }
+        
+        .order-card { border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+        .order-header { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+        .order-status { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; background: rgba(76, 175, 80, 0.1); color: #4CAF50; }
+        .order-items { font-size: 14px; color: var(--text-muted); }
+        
+        .fav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .fav-card { background: var(--bg-color); border: 1px solid var(--border); border-radius: 16px; padding: 20px; text-align: center; position: relative; }
+        .fav-card h4 { font-size: 16px; margin-bottom: 10px; }
+        .fav-card p { color: var(--accent); font-weight: 700; }
+        .fav-remove { position: absolute; top: 10px; right: 10px; background: transparent; border: none; color: #F44336; cursor: pointer; font-size: 20px; }
+        
+        .empty-state { text-align: center; color: var(--text-muted); padding: 40px 0; font-size: 16px; }
+        
+        .settings-form { max-width: 400px; display: flex; flex-direction: column; gap: 20px; }
+        .settings-form input { width: 100%; padding: 14px; background: var(--bg-color); border: 1px solid var(--border); border-radius: 12px; color: var(--text-main); font-size: 16px; outline: none; }
+        .settings-form input:focus { border-color: var(--accent); }
+
+        @media (max-width: 768px) {
+            .profile-layout { flex-direction: column; padding-top: 100px; }
+            .profile-sidebar { width: 100%; }
+            .profile-nav { flex-direction: row; overflow-x: auto; padding-bottom: 10px; }
+            .profile-nav-btn { white-space: nowrap; }
+            .profile-content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header__inner">
+            <a href="index.html" class="header__logo">Dr. Brezel <span>Gourmet</span></a>
+            <nav class="header__nav">
+                <a href="catalog.html">Коллекция</a>
+                <a href="about.html">О бренде</a>
+            </nav>
+            <button class="header__btn desktop-only" onclick="window.location.href='index.html'">На главную</button>
+        </div>
+    </header>
+
+    <main class="profile-layout">
+        <aside class="profile-sidebar">
+            <h2>Мой кабинет</h2>
+            <div class="profile-nav">
+                <button class="profile-nav-btn active" data-tab="info">Личные данные</button>
+                <button class="profile-nav-btn" data-tab="orders">История заказов</button>
+                <button class="profile-nav-btn" data-tab="favorites">Избранное</button>
+                <button class="profile-nav-btn" data-tab="settings">Настройки</button>
+                <button class="profile-nav-btn" data-tab="logout" style="color: #F44336;">Выйти</button>
+            </div>
+        </aside>
+
+        <section class="profile-content">
+            <div class="profile-tab active" id="tab-info">
+                <h3 class="tab-title">Личные данные</h3>
+                <div class="info-grid">
+                    <div class="info-item"><label>Имя</label><p id="user-name">Загрузка...</p></div>
+                    <div class="info-item"><label>Email</label><p id="user-email">Загрузка...</p></div>
+                </div>
+            </div>
+
+            <div class="profile-tab" id="tab-orders">
+                <h3 class="tab-title">История заказов</h3>
+                <div id="orders-list"><div class="empty-state">Загрузка...</div></div>
+            </div>
+
+            <div class="profile-tab" id="tab-favorites">
+                <h3 class="tab-title">Избранное</h3>
+                <div id="fav-list" class="fav-grid"><div class="empty-state" style="grid-column: 1/-1;">Загрузка...</div></div>
+            </div>
+
+            <div class="profile-tab" id="tab-settings">
+                <h3 class="tab-title">Настройки</h3>
+                
+                <!-- Блок Brezel's Guard -->
+                <div style="background: #1A1A1A; border-radius: 16px; padding: 24px; margin-bottom: 30px; border: 1px solid #2A2A2A;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="width: 50px; height: 50px; background: #FFA600; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">🛡️</div>
+                        <div>
+                            <h4 style="margin: 0; font-size: 20px; color: #fff;">Brezel's Guard</h4>
+                            <p style="margin: 0; font-size: 14px; color: #888;">Максимальная защита аккаунта</p>
+                        </div>
+                    </div>
+
+                    <!-- Кнопка Telegram -->
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-top: 1px solid #2A2A2A;">
+    <div>
+        <p style="margin: 0; color: #fff; font-size: 15px;">Привязка Telegram</p>
+        <p style="margin: 0; color: #888; font-size: 12px;">Получайте уведомления и входите с телефона</p>
+    </div>
+    <button id="link-tg-btn" style="background: transparent; color: #229ED9; border: 1px solid #229ED9; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">Привязать</button>
+</div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #2A2A2A;">
+                        <div>
+                            <p style="margin: 0; color: #fff; font-size: 16px;">Двухфакторная аутентификация (2FA)</p>
+                            <p style="margin: 0; color: #888; font-size: 13px; margin-top: 4px;">Вход по 6-значному коду из приложения (Google Auth)</p>
+                        </div>
+                        <button id="enable-2fa-btn" style="background: #FFA600; color: #000; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">Включить</button>
+                    </div>
+
+                    <!-- Секция SOS -->
+                    <div id="sos-section" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px dashed #F44336;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <p style="margin: 0; color: #F44336; font-size: 16px; font-weight: 600;">Меня взломали!</p>
+                                <p style="margin: 0; color: #888; font-size: 13px; margin-top: 4px;">Экстренная блокировка и анализ Brezel's Guard</p>
+                            </div>
+                            <button id="sos-btn" style="background: transparent; color: #F44336; border: 1px solid #F44336; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; transition: all 0.3s;">SOS</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Строка 4: Режим презентации -->
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-top: 1px solid #2A2A2A; border-bottom: 1px solid #2A2A2A; margin-bottom: 30px;">
+                    <div>
+                        <p style="margin: 0; color: #fff; font-size: 15px;">Режим презентации</p>
+                        <p style="margin: 0; color: #888; font-size: 12px;">Автоматическая смена фото в товаре</p>
+                    </div>
+                    <input type="checkbox" id="presentation-toggle" style="width: 20px; height: 20px; cursor: pointer;" checked>
+                </div>
+
+                <!-- Смена имени -->
+                <h3 class="tab-title" style="font-size: 20px; margin-bottom: 15px;">Профиль</h3>
+                <form class="settings-form" id="settings-form">
+                    <div class="input-group"><label>Новое имя</label><input type="text" id="settings-name" placeholder="Введите новое имя"></div>
+                    <button type="submit" class="btn">Сохранить</button>
+                </form>
+                
+                <!-- Смена пароля -->
+                <h3 class="tab-title" style="font-size: 20px; margin-top: 30px; margin-bottom: 15px;">Смена пароля</h3>
+                <form class="settings-form" id="password-form">
+                    <div class="input-group"><label>Новый пароль</label><input type="password" id="new-password" placeholder="Минимум 8 символов"></div>
+                    <button type="submit" class="btn">Сменить пароль</button>
+                </form>
+
+                <!-- Удаление аккаунта -->
+                <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #333;">
+                    <button id="delete-account-btn" style="background: transparent; color: #F44336; border: 1px solid #F44336; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">Удалить аккаунт</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="js/profile.js"></script>
+</body>
+</html>

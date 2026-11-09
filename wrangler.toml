@@ -1,0 +1,20 @@
+name = "drbrezel-api"
+main = "worker.js"
+compatibility_date = "2024-03-01"
+
+[[kv_namespaces]]
+binding = "MESSAGES_KV"
+id = "2998fbc6d33345189d91e0dd564d5edf"
+preview_id = "603abf0a52034880b22944561430b864"
+
+[ai]
+binding = "AI"
+
+# Durable Object для лимитов (добавим позже, если нужно)
+# [[durable_objects.bindings]]
+# name = "RATE_LIMITER"
+# class_name = "RateLimiter"
+
+[[routes]]
+pattern = "api.drbrezel.ru"
+custom_domain = true

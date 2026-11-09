@@ -1,0 +1,68 @@
+/* Базовые переменные стиля (Черный + Оранжевый) */
+:root {
+    --bg-color: #0A0A0A;
+    --bg-card: #151515;
+    --text-main: #FFFFFF;
+    --text-muted: #A0A0A0;
+    --accent: #FFA600;
+    --accent-hover: #E69500;
+    --border: #2A2A2A;
+    
+    --font-heading: 'Syne', sans-serif;
+    --font-body: 'Work Sans', sans-serif;
+    
+    --radius: 16px;
+    --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition);
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* Анимация появления */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Мобильная типографика */
+@media (max-width: 768px) {
+    h1 { font-size: 40px !important; }
+    h2 { font-size: 32px !important; }
+    h3 { font-size: 24px !important; }
+    .container { padding: 0 20px; }
+}

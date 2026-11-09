@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dr. Brezel Gourmet | Премиальный сыр</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Syne:wght@700&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>   
+    
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="container header__inner">
+        <a href="index.html" class="header__logo">Dr. Brezel <span>Gourmet</span></a>
+        <nav class="header__nav">
+            <a href="catalog.html">Коллекция</a>
+            <a href="about.html">О бренде</a>
+        </nav>
+        <div class="header__auth-buttons" id="auth-buttons" style="display: flex; gap: 15px; align-items: center;"></div>
+        <button class="burger" id="burger-btn" aria-label="Меню">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="catalog.html">Коллекция</a>
+        <a href="about.html">О бренде</a>
+        <button class="header__btn" onclick="document.getElementById('lead-form')?.scrollIntoView({behavior: 'smooth'}); document.getElementById('mobile-menu').classList.remove('active'); document.getElementById('burger-btn').classList.remove('active');">Оставить заявку</button>
+    </div>
+</header>
+
+<!-- ОБЪЯВЛЕНИЕ -->
+<div style="background: linear-gradient(90deg, #FFA600, #FF7A00); color: #000; text-align: center; padding: 12px; font-weight: 700; font-size: 14px; position: relative; z-index: 101;">
+    🚧 Сайт находится в закрытом показе. Идет разработка масштабного обновления (Brezel's Guard v0.5) 🚧
+</div>
+
+<main>
+    <!-- HERO -->
+    <section class="hero">
+
+        <div id="hero-particles" class="hero__particles"></div>
+        
+        <div class="container">
+            <div class="hero__content reveal">
+                <h1 class="hero__title">Сыр, которым<br><span class="dynamic-word" id="dynamic-word">восхищаются</span></h1>
+                <p class="hero__subtitle">Мы не делаем сыр ради продажи. Мы создаем легенду, где каждая головка — это произведение искусства.</p>
+                <a href="#3d" class="btn">Смотреть коллекцию</a>
+            </div>
+        </div>
+        <div class="hero__visual" id="hero-visual"></div>
+    </section>
+
+<!-- БЕГУЩАЯ СТРОКА -->
+<div class="ticker">
+    <div class="ticker__inner" id="ticker-inner"></div>
+</div>
+
+    <!-- ДОКТОР БРЕЗЕЛЬ -->
+    <section class="doctor-section">
+        <div class="container doctor__inner">
+            
+            <!-- ЛЕВАЯ ЧАСТЬ: ФОТО -->
+            <div class="doctor__image-wrap reveal">
+                <div class="doctor__glow"></div>
+                <div class="doctor__image-placeholder">
+                    <span>[Место под фото<br>Доктора Брезеля]</span>
+                </div>
+            </div>
+
+            <!-- ПРАВАЯ ЧАСТЬ: ТЕКСТ И ЧАТ -->
+            <div class="doctor__content reveal" style="transition-delay: 0.2s;">
+                <h2 class="doctor__quote">«Сыр, который не пахнет семечкой — это не сыр. Это экстракт. А я делаю <span>настоящий</span> сыр.»</h2>
+                <p class="card__text" style="margin-bottom: 30px; color: var(--text-muted); font-size: 18px;">Доктор Брезель лично следит за каждой головкой. Задайте ему любой вопрос.</p>
+                
+                <!-- ЧАТ-ВИДЖЕТ -->
+                <div class="chat-widget reveal">
+                    <div class="chat-header">
+                        <div class="chat-avatar">DB</div>
+                        <div class="chat-info">
+                            <h4>Доктор Брезель</h4>
+                            <div class="status"><span class="status-dot"></span> В сети</div>
+                        </div>
+                        <button id="clear-chat-btn" style="margin-left: auto; background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 5px;" title="Очистить историю">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                        </button>
+                    </div>
+                    
+                    <div id="chat-messages" class="chat-messages">
+                        <!-- Сообщения -->
+                    </div>
+
+                    <div id="stickers-panel" class="stickers-panel"></div>
+
+                    <div class="chat-input-wrap">
+                        <button id="stickers-btn" title="Стикеры">
+                            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
+                        </button>
+                        <input type="text" id="chat-input" placeholder="Спросить Доктора...">
+                        <button id="chat-send" title="Отправить">
+                            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                        </button>
+                    </div>
+                    
+                    <button id="call-human-btn" class="call-human-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                        Связаться с менеджером
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ ОБОРУДОВАНИЯ (3D) -->
+    <section id="3d" class="section-equip">
+        <h2>Наше <span style="color:var(--accent)">оборудование</span></h2>
+        <div class="equip-scroll-wrapper" id="equip-scroll">
+            
+            <!-- Карточка 1 -->
+            <div class="equip-card">
+                <div class="equip-img" id="model-1">
+                    <!-- Сюда вставим 3D -->
+                </div>
+                <div class="equip-content">
+                    <h3>Ручной пресс</h3>
+                    <p>Используется для формирования головок сыра. Позволяет регулировать давление вручную.</p>
+                    <span class="equip-tag">
+                        <span class="equip-tag-fill"></span>
+                        <span class="equip-tag-text-white">Твердые сорта</span>
+                        <span class="equip-tag-text-black">Твердые сорта</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Карточка 2 -->
+            <div class="equip-card">
+                <div class="equip-img" id="model-2"></div>
+                <div class="equip-content">
+                    <h3>Сырная ванна</h3>
+                    <p>Для пастеризации молока и отделения сыворотки. Точный контроль температуры.</p>
+                    <span class="equip-tag">
+                        <span class="equip-tag-fill"></span>
+                        <span class="equip-tag-text-white">Все сорта</span>
+                        <span class="equip-tag-text-black">Все сорта</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Карточка 3 -->
+            <div class="equip-card">
+                <div class="equip-img" id="model-3"></div>
+                <div class="equip-content">
+                    <h3>Стеллаж для выдержки</h3>
+                    <p>Деревянные полки, где сыр дышит и набирает вкус. Идеальный микроклимат.</p>
+                    <span class="equip-tag">
+                        <span class="equip-tag-fill"></span>
+                        <span class="equip-tag-text-white">Выдержка</span>
+                        <span class="equip-tag-text-black">Выдержка</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Карточка 4 -->
+            <div class="equip-card">
+                <div class="equip-img" id="model-4"></div>
+                <div class="equip-content">
+                    <h3>Нож для сыра</h3>
+                    <p>Специальная струна для идеального среза. Не нарушает текстуру головки.</p>
+                    <span class="equip-tag">
+                        <span class="equip-tag-fill"></span>
+                        <span class="equip-tag-text-white">Инструмент</span>
+                        <span class="equip-tag-text-black">Инструмент</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Карточка 5 -->
+            <div class="equip-card">
+                <div class="equip-img" id="model-5"></div>
+                <div class="equip-content">
+                    <h3>Термометр</h3>
+                    <p>Контроль температуры на каждом этапе. От сырного зерна до готовой головки.</p>
+                    <span class="equip-tag">
+                        <span class="equip-tag-fill"></span>
+                        <span class="equip-tag-text-white">Контроль</span>
+                        <span class="equip-tag-text-black">Контроль</span>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Подключаем скрипт для 3D-моделей -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+    <!-- СЕКЦИЯ ПОДПИСКИ (ВМЕСТО ЗАЯВКИ) -->
+    <section id="subscribe" class="container" style="padding: 120px 0; text-align: center;">
+        <h2 class="reveal" style="font-size: 56px; margin-bottom: 20px;">Клуб гурманов</h2>
+        <p class="reveal" style="color: var(--text-muted); margin-bottom: 40px; font-size: 18px; max-width: 600px; margin-left: auto; margin-right: auto;">
+            Узнавайте о новых сортах, лимитированных партиях и закрытых дегустациях первыми. Никакого спама, только сыр.
+        </p>
+        
+        <form id="form-subscribe" class="reveal" style="max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
+            <input type="email" name="email" placeholder="Ваш Email" required style="padding: 18px; background: var(--bg-card); border: 1px solid var(--border); color: white; border-radius: 50px; text-align: center; outline: none; font-size: 16px;">
+            <button type="submit" class="btn" style="border-radius: 50px; padding: 18px;">Вступить в клуб</button>
+        </form>
+    </section>
+</main>
+
+<!-- НОВЫЙ КРАСИВЫЙ ФУТЕР -->
+<footer style="padding: 80px 0 40px; border-top: 1px solid var(--border); background: #0A0A0A;">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 60px;">
+            
+            <!-- Колонка 1: Бренд -->
+            <div>
+                <a href="index.html" class="header__logo" style="font-size: 28px; margin-bottom: 20px; display: block;">Dr. Brezel <span>Gourmet</span></a>
+                <p style="color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
+                    Премиальный сыр и брецели ручной работы. Сделано с душой, выдержано со временем.
+                </p>
+                <div style="display: flex; gap: 15px;">
+                    <!-- ВК -->
+                    <a href="https://vk.ru/drbrezelgourmet" target="_blank" aria-label="ВКонтакте" style="color: var(--text-main); transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-main)'">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.785 16.241s.288-.032.436-.191c.136-.146.132-.42.132-.42s-.02-1.283.576-1.472c.588-.186 1.342 1.241 2.142 1.789.606.414 1.065.323 1.065.323l2.142-.03s1.12-.069.589-.949c-.044-.072-.31-.652-1.596-1.848-1.345-1.254-1.164-1.051.455-3.22.986-1.321 1.38-2.128 1.257-2.473-.117-.328-.84-.241-.84-.241l-2.41.015s-.179-.025-.311.055c-.13.078-.213.26-.213.26s-.381 1.015-.889 1.879c-1.071 1.823-1.5 1.919-1.674 1.806-.406-.263-.304-1.059-.304-1.624 0-1.765.267-2.501-.52-2.691-.261-.063-.454-.104-1.124-.111-.86-.009-1.588.003-1.999.206-.274.135-.485.436-.356.453.159.021.519.097.709.356.246.334.237 1.085.237 1.085s.142 2.077-.33 2.334c-.323.176-.767-.183-1.719-1.824-.488-.846-.856-1.781-.856-1.781s-.071-.174-.198-.267c-.153-.113-.367-.149-.367-.149l-2.287.015s-.343.01-.469.159c-.112.132-.009.406-.009.406s1.792 4.192 3.822 6.303c1.86 1.933 3.972 1.806 3.972 1.806h.957z"/></svg>
+                    </a>
+                    <!-- Telegram -->
+                    <a href="https://t.me/drbrezelgourmet" target="_blank" aria-label="Telegram" style="color: var(--text-main); transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-main)'">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                    </a>
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/drbrezelgourmet" target="_blank" aria-label="Instagram" style="color: var(--text-main); transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-main)'">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Колонка 2: Меню -->
+            <div>
+                <h4 style="font-family: var(--font-heading); font-size: 18px; margin-bottom: 20px; color: var(--accent);">Навигация</h4>
+                <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px;">
+                    <li><a href="catalog.html" style="color: var(--text-muted); font-size: 15px;">Коллекция</a></li>
+                    <li><a href="about.html" style="color: var(--text-muted); font-size: 15px;">О бренде</a></li>
+                    <li><a href="cart.html" style="color: var(--text-muted); font-size: 15px;">Корзина</a></li>
+                    <li><a href="profile.html" style="color: var(--text-muted); font-size: 15px;">Личный кабинет</a></li>
+                </ul>
+            </div>
+
+            <!-- Колонка 3: Контакты и Поддержка -->
+            <div>
+                <h4 style="font-family: var(--font-heading); font-size: 18px; margin-bottom: 20px; color: var(--accent);">Поддержка</h4>
+                <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 15px;">Есть вопросы? Мы всегда на связи.</p>
+                <a href="mailto:manager@brezel.doctor" style="display: block; color: var(--text-main); font-size: 16px; margin-bottom: 15px; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-main)'">manager@brezel.doctor</a>
+                <a href="https://t.me/drbrezel_support_bot" target="_blank" class="btn" style="display: inline-flex; padding: 12px 24px; font-size: 13px; border-color: var(--border); color: var(--text-main);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 8px;"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                    Написать в поддержку
+                </a>
+            </div>
+        </div>
+
+        <!-- Нижняя часть футера -->
+        <div style="border-top: 1px solid var(--border); padding-top: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+            <div style="color: var(--text-muted); font-size: 14px;">© 2026 Dr. Brezel Gourmet. Все права защищены.</div>
+            <div style="color: var(--text-muted); font-size: 13px;">
+                Сделано с любовью к сыру 🧀
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- МОДАЛКА ДЛЯ КАПЧИ -->
+<div id="captcha-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+    <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 40px; border-radius: 24px; text-align: center; max-width: 400px; width: 90%;">
+        <h3 style="margin-bottom: 20px; font-family: var(--font-heading); font-size: 24px;">Подтвердите, что вы не робот</h3>
+        <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark" style="display: flex; justify-content: center; margin-bottom: 20px;"></div>
+        <button id="close-captcha-btn" class="btn" style="width: 100%;">Отмена</button>
+    </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+<div id="preloader" style="position: fixed; inset: 0; background: var(--bg-color); z-index: 99999; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s;">
+    <div style="font-size: 64px; animation: roll 1.5s linear infinite;">🧀</div>
+</div>
+<style>
+    @keyframes roll {
+        0% { transform: rotate(0deg) translateX(0); }
+        50% { transform: rotate(180deg) translateX(50px); }
+        100% { transform: rotate(360deg) translateX(0); }
+    }
+</style>
+</body>
+</html>

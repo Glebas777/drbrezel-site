@@ -1,0 +1,665 @@
+/* =========================================
+   БАЗОВЫЕ СТИЛИ И КНОПКИ
+   ========================================= */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border: 1px solid var(--text-main);
+    color: var(--text-main);
+    background: transparent;
+    transition: var(--transition);
+}
+.btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg-color);
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   HERO СЕКЦИЯ
+   ========================================= */
+.hero__title {
+    font-size: clamp(64px, 8vw, 120px);
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    line-height: 0.9;
+}
+.hero__title span {
+    color: var(--accent);
+    display: block;
+}
+.hero__subtitle {
+    font-size: 20px;
+    color: var(--text-muted);
+    max-width: 500px;
+    margin-bottom: 48px;
+}
+
+/* Анимация слова */
+.dynamic-word {
+    color: var(--accent);
+    display: inline-block;
+    transition: font-family 0.5s ease, transform 0.5s ease;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+}
+.dynamic-word.alt-font {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 700;
+    transform: scale(1.05) translateY(5px);
+}
+
+/* Фоновая карусель */
+.hero__visual {
+    position: absolute;
+    right: 0; /* Растягиваем от края до края */
+    top: 0;
+    width: 60vw; /* Занимает правую часть экрана */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 1;
+    opacity: 0.6;
+    pointer-events: none;
+    overflow: hidden; /* Скрываем всё, что вылезает */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 30%);
+    mask-image: linear-gradient(to right, transparent 0%, black 30%);
+}
+
+.hero__visual-row {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    animation: scroll 200s linear infinite;
+    transform: translateZ(0);
+    will-change: transform;
+    align-items: center; /* Выравниваем по центру, чтобы сдвиги смотрелись ровно */
+}
+
+/* Карточка */
+.hero__visual-item {
+    background-color: var(--bg-card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    flex-shrink: 0;
+    filter: brightness(0.6) contrast(1.1);
+    transition: filter 0.3s;
+    background-size: cover;
+    background-position: center;
+    /* Убрали жесткие width и height, так как они задаются в JS */
+}
+
+/* Чуть уменьшаем карточки на мобилках, чтобы больше влезало */
+@media (max-width: 768px) {
+    .hero__visual {
+        width: 80vw;
+        opacity: 0.4;
+    }
+    .hero__visual-item {
+        width: 200px;
+        height: 250px;
+    }
+}
+.hero__visual-row:nth-child(even) {
+    animation-direction: reverse;
+}
+.hero__visual-item {
+    width: 350px;
+    height: 400px;
+    background-color: var(--bg-card); /* Запасной фон, пока грузится */
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    flex-shrink: 0;
+    position: relative;
+    /* Небольшое затемнение, чтобы картинки не перебивали текст */
+    filter: brightness(0.7) contrast(1.1);
+    transition: filter 0.3s;
+}
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* =========================================
+   ДОКТОР БРЕЗЕЛЬ
+   ========================================= */
+.doctor-section {
+    padding: 120px 0;
+    background: var(--bg-color); /* Убрали серый фон, чтобы было единое пространство */
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+}
+
+.doctor__inner {
+    display: flex;
+    align-items: center;
+    gap: 80px; /* Увеличили отступ между фото и текстом */
+}
+
+/* Обертка для фото со свечением */
+.doctor__image-wrap {
+    position: relative;
+    flex-shrink: 0;
+    width: 400px;
+    height: 500px;
+}
+
+/* Оранжевое свечение позади фото */
+.doctor__glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 166, 0, 0.2) 0%, transparent 70%);
+    filter: blur(40px);
+    z-index: 0;
+}
+
+.doctor__image-placeholder {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #151515 0%, #0A0A0A 100%);
+    border: 1px solid var(--border);
+    border-radius: 24px; /* Более круглые углы */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-family: var(--font-heading);
+    font-size: 16px;
+    text-align: center;
+    z-index: 1;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    overflow: hidden;
+}
+
+/* Декор в углу фото */
+.doctor__image-placeholder::after {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-right: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    border-radius: 0 0 12px 0;
+}
+
+.doctor__content { flex: 1; }
+.doctor__quote {
+    font-family: var(--font-heading);
+    font-size: 36px;
+    line-height: 1.3;
+    margin-bottom: 30px;
+}
+.doctor__quote span { color: var(--accent); }
+
+/* =========================================
+   БЕГУЩАЯ СТРОКА
+   ========================================= */
+.ticker {
+    padding: 30px 0;
+    background: var(--accent);
+    color: var(--bg-color);
+    overflow: hidden;
+    white-space: nowrap;
+    border-top: 1px solid var(--border);
+}
+.ticker__inner {
+    display: inline-block;
+    animation: ticker 200s linear infinite;
+    transform: translateZ(0);
+}
+.ticker__item {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0 20px;
+}
+@keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* =========================================
+   ЧАТ
+   ========================================= */
+.chat-widget {
+    margin-top: 40px;
+    background: #1A1A1A;
+    border: 1px solid #333;
+    border-radius: 24px;
+    padding: 20px;
+    max-width: 500px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+    position: relative;
+    overflow: hidden;
+}
+.chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    gap: 12px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #2A2A2A;
+    margin-bottom: 15px;
+}
+.chat-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 20px;
+    color: #000;
+}
+.chat-info h4 { font-size: 16px; margin: 0; color: #fff; }
+.chat-info .status { font-size: 12px; color: #4CAF50; display: flex; align-items: center; gap: 5px; }
+.status-dot { width: 6px; height: 6px; background: #4CAF50; border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+.chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; padding-right: 5px; scroll-behavior: smooth; }
+.chat-messages::-webkit-scrollbar { width: 6px; }
+.chat-messages::-webkit-scrollbar-track { background: transparent; }
+.chat-messages::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+.msg-wrapper { display: flex; flex-direction: column; max-width: 85%; }
+.msg-wrapper.user { align-self: flex-end; align-items: flex-end; }
+.msg-wrapper.bot { align-self: flex-start; align-items: flex-start; }
+.msg { padding: 12px 16px; border-radius: 20px; font-size: 15px; line-height: 1.4; position: relative; word-wrap: break-word; }
+.msg-wrapper.user .msg { background: var(--accent); color: #000; border-bottom-right-radius: 4px; }
+.msg-wrapper.bot .msg { background: #2A2A2A; color: #fff; border-bottom-left-radius: 4px; }
+.msg-meta { display: flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 11px; color: #666; position: relative; }
+.msg-meta span { cursor: default; transition: color 0.3s; }
+.msg-meta span:hover { color: var(--accent); }
+.msg-meta .copy-icon { opacity: 0; transform: translateX(-10px); transition: all 0.3s ease; cursor: pointer; display: flex; align-items: center; position: absolute; right: -25px; }
+.msg-meta:hover .copy-icon { opacity: 1; transform: translateX(0); }
+.copy-icon svg { width: 14px; height: 14px; fill: currentColor; }
+.copy-icon:hover { color: var(--accent); }
+.chat-input-wrap { display: flex; align-items: center; gap: 10px; margin-top: 15px; background: #222; border-radius: 30px; padding: 5px 15px; border: 1px solid #333; }
+.chat-input-wrap input { flex: 1; background: transparent; border: none; padding: 12px 0; color: #fff; outline: none; font-size: 15px; }
+.chat-input-wrap button { background: transparent; border: none; cursor: pointer; color: var(--accent); display: flex; align-items: center; justify-content: center; padding: 8px; border-radius: 50%; transition: background 0.3s; }
+.chat-input-wrap button:hover { background: rgba(255, 166, 0, 0.1); }
+.chat-input-wrap button svg { width: 20px; height: 20px; fill: currentColor; }
+.stickers-panel { position: absolute; bottom: 80px; left: 20px; right: 20px; background: #1E1E1E; border: 1px solid #333; border-radius: 16px; padding: 15px; display: none; grid-template-columns: repeat(4, 1fr); gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 10; }
+.stickers-panel.active { display: grid; }
+.sticker-item { width: 100%; aspect-ratio: 1; background-size: 300% 400%; background-repeat: no-repeat; border-radius: 12px; cursor: pointer; transition: transform 0.2s; border: 1px solid #333; }
+.sticker-item:hover { transform: scale(1.1); border-color: var(--accent); }
+.msg-sticker { width: 120px; height: 120px; background-size: 300% 400%; background-repeat: no-repeat; border-radius: 16px; margin-top: 5px; }
+.chat-input-wrap.disabled { opacity: 0.5; pointer-events: none; }
+
+/* =========================================
+   СЕКЦИЯ ОБОРУДОВАНИЯ (3D)
+   ========================================= */
+.section-equip { padding: 100px 0; overflow: hidden; background: var(--bg-color); }
+.section-equip h2 { text-align: center; font-size: 48px; margin-bottom: 60px; text-transform: uppercase; }
+
+/* Контейнер: фиксированный, с перспективой */
+.equip-scroll-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 600px;
+    position: relative;
+    perspective: 2000px;
+    perspective-origin: center center;
+    cursor: grab;
+    overflow: hidden;
+}
+.equip-scroll-wrapper:active { cursor: grabbing; }
+
+/* Базовая карточка */
+.equip-card {
+    position: absolute;
+    width: 350px;
+    height: 500px;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    transform-origin: center center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    opacity: 1;
+}
+
+/* --- ВЕЕР (НИКТО НЕ КЛИКНУЛ) --- */
+/* Левая 1 (Самая нижняя) */
+.equip-card:nth-child(1) {
+    transform: translateX(-480px) rotateY(35deg) scale(0.85);
+    filter: brightness(0.4);
+    z-index: 1; 
+}
+/* Левая 2 (Средний слой) */
+.equip-card:nth-child(2) {
+    transform: translateX(-240px) rotateY(20deg) scale(0.9);
+    filter: brightness(0.6);
+    z-index: 2;
+}
+/* Центральная 3 (Самый верхний слой) */
+.equip-card:nth-child(3) {
+    transform: translateX(0) rotateY(0deg) scale(1);
+    filter: brightness(1);
+    z-index: 3;
+}
+/* Правая 4 (Средний слой) */
+.equip-card:nth-child(4) {
+    transform: translateX(240px) rotateY(-20deg) scale(0.9);
+    filter: brightness(0.6);
+    z-index: 2;
+}
+/* Правая 5 (Самая нижняя) */
+.equip-card:nth-child(5) {
+    transform: translateX(480px) rotateY(-35deg) scale(0.85);
+    filter: brightness(0.4);
+    z-index: 1;
+}
+
+/* --- АКТИВНАЯ КАРТОЧКА --- */
+.equip-card.is-active {
+    transform: translateX(0) rotateY(0deg) scale(1) !important;
+    filter: brightness(1) !important;
+    border-color: var(--accent);
+    box-shadow: 0 20px 50px rgba(255, 166, 0, 0.3);
+    z-index: 10 !important;
+    flex-direction: row;
+    width: 650px; /* Ширина активной карточки */
+}
+
+/* --- УЕХАВШИЕ В СТОРОНЫ КАРТОЧКИ --- */
+.equip-card.is-left {
+    transform: translateX(-600px) rotateY(50deg) scale(0.7) !important;
+    filter: brightness(0.2) !important;
+    z-index: 1 !important;
+    pointer-events: none;
+}
+.equip-card.is-right {
+    transform: translateX(600px) rotateY(-50deg) scale(0.7) !important;
+    filter: brightness(0.2) !important;
+    z-index: 1 !important;
+    pointer-events: none;
+}
+
+/* Внутренности активной карточки */
+.equip-card.is-active .equip-img {
+    width: 50%;
+    height: 100%;
+    border-bottom: none;
+    border-right: 1px solid var(--border);
+    border-radius: var(--radius) 0 0 var(--radius);
+}
+.equip-card.is-active .equip-content {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Общие стили для картинки и текста */
+.equip-img {
+    width: 100%;
+    height: 60%;
+    background: linear-gradient(135deg, #1A1A1A 0%, #0A0A0A 100%);
+    position: relative;
+    border-bottom: 1px solid var(--border);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.equip-img model-viewer {
+    width: 100%;
+    height: 100%;
+    outline: none;
+    background-color: transparent;
+    --poster-color: transparent;
+}
+
+.equip-content {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    z-index: 1;
+    transition: opacity 0.3s;
+} 
+
+.equip-content h3 { color: var(--accent); font-size: 24px; margin-bottom: 10px; }
+.equip-content p { color: var(--text-muted); font-size: 15px; line-height: 1.5; margin-bottom: 20px; flex: 1; }
+
+/* Кнопка (двойной текст) */
+.equip-tag {
+    margin-top: auto; font-size: 12px; text-transform: uppercase; letter-spacing: 2px;
+    border: 1px solid var(--border); padding: 8px 16px; border-radius: 30px;
+    display: inline-block; align-self: flex-start; position: relative;
+    overflow: hidden; background: var(--bg-card); white-space: nowrap;
+    min-width: 120px; text-align: center; transition: border-color 0.3s; line-height: 1.5;
+}
+.equip-tag-fill {
+    display: block; position: absolute; top: 0; left: 0; height: 100%; width: 0%;
+    background: var(--accent); z-index: 0; transition: width 0.3s ease;
+    pointer-events: none; border-radius: 30px;
+}
+.equip-tag-text-white {
+    display: block; position: relative; color: var(--text-main); z-index: 1; transition: color 0.3s;
+}
+.equip-tag-text-black {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    color: #000; z-index: 2; clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.3s ease; white-space: nowrap; pointer-events: none;
+}
+.equip-card.is-active .equip-tag-fill { width: 100%; }
+.equip-card.is-active .equip-tag-text-black { clip-path: inset(0 0 0 0); }
+.equip-card.is-active .equip-tag-text-white { color: transparent; }
+
+/* --- Стили для Markdown в чате --- */
+.msg-wrapper.bot .msg p { margin-bottom: 8px; }
+.msg-wrapper.bot .msg p:last-child { margin-bottom: 0; }
+.msg-wrapper.bot .msg strong { color: var(--accent); font-weight: 700; }
+.msg-wrapper.bot .msg ul, .msg-wrapper.bot .msg ol { margin-left: 20px; margin-bottom: 10px; }
+.msg-wrapper.bot .msg li { margin-bottom: 5px; }
+.msg-wrapper.bot .msg h3 { font-size: 16px; margin-bottom: 8px; color: var(--accent); }
+.msg-wrapper.bot .msg code { background: #111; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #ff9d00; }
+
+
+/* =========================================
+   МОБИЛЬНАЯ АДАПТАЦИЯ
+   ========================================= */
+@media (max-width: 1024px) {
+    .hero__title { font-size: clamp(48px, 10vw, 80px); }
+    .hero__subtitle { font-size: 18px; }
+    .doctor__inner { flex-direction: column; text-align: center; gap: 30px; }
+    .doctor__image-placeholder { width: 100%; max-width: 300px; height: 400px; }
+    .doctor__quote { font-size: 28px; }
+}
+
+@media (max-width: 768px) {
+    .section-equip, .doctor-section { padding: 60px 0; }
+    .hero { padding: 90px 0 40px; }
+    .ticker { padding: 20px 0; }
+    
+    /* Отключаем сложный 3D на мобилках, чтобы не тормозило */
+    .equip-scroll-wrapper { 
+        padding: 20px 15px; 
+        height: auto; 
+        display: flex; 
+        flex-direction: row; 
+        overflow-x: auto; 
+        gap: 15px; 
+        justify-content: flex-start; 
+        perspective: none; 
+    }
+    .equip-card { 
+        position: relative; 
+        flex: 0 0 calc(100vw - 60px); 
+        height: 450px; 
+        transform: none !important; 
+        opacity: 1 !important; 
+        pointer-events: auto !important; 
+        margin: 0; 
+        filter: brightness(1) !important;
+    }
+    .equip-card.is-active { flex-direction: column; width: calc(100vw - 40px); }
+    .equip-card.is-active .equip-img { width: 100%; height: 50%; border-radius: var(--radius) var(--radius) 0 0; }
+    .equip-card.is-active .equip-content { width: 100%; height: 50%; }
+    .equip-card.is-left, .equip-card.is-right { display: none; }
+
+    /* Чат */
+    .chat-widget { height: 500px; margin-top: 20px; }
+    .chat-messages { padding-right: 0; }
+    .msg { max-width: 90%; font-size: 14px; }
+    .msg-wrapper { max-width: 90%; }
+    .chat-input-wrap { padding: 5px 10px; }
+    .chat-input-wrap input { font-size: 14px; }
+    
+    /* Стикеры */
+    .stickers-panel { grid-template-columns: repeat(3, 1fr); bottom: 70px; }
+    .msg-sticker { width: 100px; height: 100px; }
+    
+    /* Форма */
+    #lead-form { padding: 60px 20px !important; }
+    #form-lead { max-width: 100%; }
+    
+    /* Футер */
+    footer .container { flex-direction: column; text-align: center; gap: 20px; }
+    footer .container > div:last-child { justify-content: center; }
+}
+
+@media (max-width: 480px) {
+    .header { background: rgba(10, 10, 10, 0.3); padding-top: max(16px, env(safe-area-inset-top) + 5px); }
+    .hero { padding: 120px 0 40px; }
+    .hero__title { font-size: 36px; }
+}
+
+/* Обертка для ввода телефона */
+.phone-input-wrap {
+    display: flex; align-items: center; background: var(--bg-card);
+    border: 1px solid var(--border); border-radius: 8px; padding: 0 16px;
+    height: 54px; transition: border-color 0.3s;
+}
+.phone-input-wrap:focus-within { border-color: var(--accent); }
+.country-select-btn {
+    display: flex; align-items: center; gap: 8px; background: transparent;
+    border: none; color: var(--text-main); font-family: var(--font-body);
+    font-size: 16px; cursor: pointer; padding-right: 12px;
+    border-right: 1px solid var(--border); margin-right: 12px;
+}
+.country-flag { font-size: 20px; line-height: 1; }
+.phone-input-wrap input {
+    flex: 1; background: transparent; border: none;
+    color: var(--text-main); font-size: 16px; outline: none; padding: 0;
+}
+
+.call-human-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 12px; margin-bottom: 10px; background: transparent;
+    border: 1px dashed var(--accent); color: var(--accent); border-radius: 12px;
+    font-family: var(--font-body); font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.3s;
+}
+.call-human-btn:hover { background: rgba(255, 166, 0, 0.1); border-style: solid; }
+
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 100px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero__content {
+    max-width: 700px;
+    position: relative;
+    z-index: 2;
+    /* Возвращаем текст на место */
+    margin-left: 0; 
+    
+}
+/* --- ПЛАВАЮЩИЕ СЫРЫ (ЛЕВАЯ ЧАСТЬ) --- */
+.hero__particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 45vw;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, black 40%, transparent 100%);
+    mask-image: linear-gradient(to right, black 40%, transparent 100%);
+}
+
+.particle {
+    position: absolute;
+    opacity: 0;
+    animation: floatAnim linear infinite;
+    will-change: transform, opacity;
+    /* Убрали fill, background и box-shadow, так как теперь это картинка */
+    filter: drop-shadow(0 0 10px rgba(255, 166, 0, 0.3));
+}
+
+/* Анимация парения, вращения и покачивания */
+@keyframes floatAnim {
+    0% { 
+        transform: translateY(0) translateX(0) rotate(0deg) scale(1); 
+        opacity: 0; 
+    }
+    10% { opacity: 0.5; }
+    50% { 
+        transform: translateY(-50vh) translateX(20px) rotate(180deg) scale(1.1); 
+    }
+    90% { opacity: 0.5; }
+    100% { 
+        transform: translateY(-100vh) translateX(-20px) rotate(360deg) scale(0.9); 
+        opacity: 0; 
+    }
+}
+
+/* Анимация точек при печати */
+.typing-dots span {
+    display: inline-block;
+    animation: typingBounce 1.4s infinite both;
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 1;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+    40% { transform: translateY(-5px); opacity: 1; }
+}

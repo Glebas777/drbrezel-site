@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dr. Brezel Gourmet | Корзина</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Syne:wght@700&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .cart-section { padding: 140px 0 80px; min-height: 80vh; }
+        .cart-layout { display: flex; gap: 40px; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Список товаров */
+        .cart-items { flex: 1; }
+        .cart-item { display: flex; align-items: center; gap: 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+        .cart-item-img { width: 80px; height: 80px; background: #222; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #555; font-size: 12px; }
+        .cart-item-info { flex: 1; }
+        .cart-item-info h4 { font-size: 18px; margin-bottom: 5px; }
+        .cart-item-info p { color: var(--text-muted); font-size: 14px; }
+        .cart-item-controls { display: flex; align-items: center; gap: 10px; }
+        .cart-item-controls button { background: var(--bg-color); border: 1px solid var(--border); color: var(--text-main); width: 30px; height: 30px; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+        .cart-item-controls button:hover { border-color: var(--accent); color: var(--accent); }
+        .cart-item-controls span { min-width: 20px; text-align: center; font-weight: 600; }
+        .cart-item-price { font-weight: 700; font-size: 18px; color: var(--accent); min-width: 100px; text-align: right; }
+        .cart-item-remove { background: transparent; border: none; color: #F44336; cursor: pointer; font-size: 20px; margin-left: 10px; }
+
+        /* Итоговая панель */
+        .cart-summary { width: 350px; flex-shrink: 0; background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 30px; height: fit-content; position: sticky; top: 120px; }
+        .cart-summary h3 { font-size: 24px; margin-bottom: 20px; font-family: var(--font-heading); }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--text-muted); }
+        .summary-row.total { font-size: 24px; font-weight: 700; color: var(--text-main); border-top: 1px solid var(--border); padding-top: 15px; margin-top: 15px; }
+        .promo-input { display: flex; gap: 10px; margin-bottom: 20px; }
+        .promo-input input { flex: 1; padding: 12px; background: var(--bg-color); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main); outline: none; }
+        .promo-input button { padding: 12px 20px; background: var(--text-main); color: var(--bg-color); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .promo-input button:hover { background: var(--accent); color: #000; }
+        .empty-cart { text-align: center; padding: 60px 0; color: var(--text-muted); font-size: 18px; }
+
+        @media (max-width: 900px) {
+            .cart-layout { flex-direction: column; }
+            .cart-summary { width: 100%; position: static; }
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="container header__inner">
+        <a href="index.html" class="header__logo">Dr. Brezel <span>Gourmet</span></a>
+        <nav class="header__nav">
+            <a href="catalog.html">Коллекция</a>
+            <a href="about.html">О бренде</a>
+        </nav>
+        <div class="header__auth-buttons" id="auth-buttons" style="display: flex; gap: 15px; align-items: center;"></div>
+    </div>
+</header>
+
+    <main class="cart-section">
+        <div class="container">
+            <h1 style="text-align: center; font-size: 48px; margin-bottom: 40px; font-family: var(--font-heading);">Корзина</h1>
+            
+            <div class="cart-layout">
+                <!-- Список товаров -->
+                <div class="cart-items" id="cart-items-container">
+                    <div class="empty-cart">Загрузка...</div>
+                </div>
+
+                <!-- Итоговая панель -->
+                <div class="cart-summary">
+                    <h3>Итого</h3>
+                    <div class="summary-row">
+                        <span>Товары</span>
+                        <span id="summary-subtotal">0 ₽</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Скидка</span>
+                        <span id="summary-discount" style="color: #4CAF50;">0 ₽</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>К оплате</span>
+                        <span id="summary-total">0 ₽</span>
+                    </div>
+                    
+                    <div class="promo-input">
+                        <input type="text" id="promo-code" placeholder="Промокод">
+                        <button id="apply-promo">Применить</button>
+                    </div>
+
+                    <button class="btn btn-full" id="checkout-btn" style="width: 100%;">Оформить заказ</button>
+                    <div class="payment-methods" style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px;">
+    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase;">Способы оплаты</p>
+    <div style="display: flex; gap: 10px;">
+        <div style="padding: 10px 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px;">VISA</div>
+        <div style="padding: 10px 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px;">MC</div>
+        <div style="padding: 10px 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px;">МИР</div>
+        <div style="padding: 10px 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px;">СБП</div>
+    </div>
+</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="js/cart-page.js"></script>
+    <div id="age-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:99999; align-items:center; justify-content:center;">
+    <div style="background: var(--bg-card); padding: 40px; border-radius: 24px; text-align: center;">
+        <h3>Вам есть 18 лет?</h3>
+        <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
+            <button class="btn" onclick="document.getElementById('age-modal').style.display='none'">Да</button>
+            <button class="btn" onclick="window.location.href='https://www.google.com'">Нет</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

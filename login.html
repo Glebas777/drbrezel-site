@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dr. Brezel Gourmet | Вход</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Syne:wght@700&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/auth.css">
+    
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body class="auth-page">
+
+    <div class="auth-container">
+        <div class="auth-box reveal active">
+            <a href="index.html" class="auth-logo">Dr. Brezel <span>Gourmet</span></a>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-login">Вход</button>
+                <button class="auth-tab" id="tab-register">Регистрация</button>
+            </div>
+
+            <!-- ФОРМА ВХОДА -->
+            <form id="login-form" class="auth-form">
+                <h2>С возвращением</h2>
+                <p class="auth-subtitle">Войдите, чтобы управлять заказами.</p>
+                
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="login-email" placeholder="your@email.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Пароль</label>
+                    <input type="password" id="login-password" placeholder="••••••••" required>
+                </div>
+
+                <!-- Капча -->
+                <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark" style="margin-bottom: 20px; display: flex; justify-content: center;"></div>
+                
+                <button type="submit" class="btn btn-full">Войти</button>
+                <a href="#" class="forgot-link" id="forgot-link">Забыли пароль?</a>
+
+                <div class="auth-divider">
+                    <span>или</span>
+                </div>
+                
+                <button type="button" id="google-login-btn" class="btn btn-google btn-full">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 10px;">
+                        <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
+                    </svg>
+                    Войти через Google
+                </button>
+            </form>
+
+            <!-- ФОРМА РЕГИСТРАЦИИ -->
+            <form id="register-form" class="auth-form" style="display: none;">
+                <h2>Создать аккаунт</h2>
+                <p class="auth-subtitle">Присоединяйтесь к клубу гурманов.</p>
+                
+                <div class="input-group">
+                    <label>Имя</label>
+                    <input type="text" id="reg-name" placeholder="Ваше имя" required>
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="reg-email" placeholder="your@email.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Пароль</label>
+                    <input type="password" id="reg-password" placeholder="Минимум 6 символов" required>
+                </div>
+                
+                <button type="submit" class="btn btn-full">Зарегистрироваться</button>
+            </form>
+
+            <!-- ФОРМА ВОССТАНОВЛЕНИЯ -->
+            <form id="forgot-form" class="auth-form" style="display: none;">
+                <h2>Восстановление</h2>
+                <p class="auth-subtitle">Мы отправим ссылку для сброса пароля на вашу почту.</p>
+                
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="forgot-email" placeholder="your@email.com" required>
+                </div>
+                
+                <button type="submit" class="btn btn-full">Отправить ссылку</button>
+                <a href="#" class="back-to-login" id="back-to-login">Вернуться ко входу</a>
+            </form>
+
+            <div id="auth-message" class="auth-message"></div>
+        </div>
+    </div>
+
+    <script type="module" src="js/auth.js"></script>
+</body>
+</html>

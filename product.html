@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dr. Brezel Gourmet | Товар</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Syne:wght@700&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .product-page { padding: 120px 0 80px; }
+        .product-layout { display: flex; gap: 60px; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .product-gallery { flex: 1; }
+        .product-main-img { width: 100%; height: 500px; background: #111; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: #333; font-size: 24px; margin-bottom: 20px; overflow: hidden; }
+        .product-thumbs { display: flex; gap: 10px; }
+        .product-thumb { width: 80px; height: 80px; background: #111; border-radius: 12px; cursor: pointer; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; color: #555; font-size: 10px; }
+        .product-thumb.active { border-color: var(--accent); }
+        .product-details { flex: 1; }
+        .product-details h1 { font-size: 48px; margin-bottom: 10px; }
+        .product-price { font-size: 32px; color: var(--accent); font-weight: 700; margin-bottom: 20px; }
+        .product-desc { color: var(--text-muted); font-size: 16px; line-height: 1.6; margin-bottom: 30px; }
+        .product-actions { display: flex; gap: 15px; margin-bottom: 40px; }
+        .product-actions .btn { flex: 1; }
+        .product-actions .btn-icon { width: 60px; flex: none; display: flex; align-items: center; justify-content: center; background: var(--bg-card); border: 1px solid var(--border); border-radius: 50px; cursor: pointer; }
+        .product-actions .btn-icon:hover { border-color: var(--accent); color: var(--accent); }
+
+        .reviews-section { margin-top: 60px; border-top: 1px solid var(--border); padding-top: 40px; }
+        .review-card { background: var(--bg-card); border: 1px solid var(--border); padding: 20px; border-radius: 16px; margin-bottom: 15px; }
+        .review-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; }
+        .review-text { color: var(--text-muted); }
+        .add-review { display: flex; flex-direction: column; gap: 15px; max-width: 500px; margin-top: 30px; }
+        .add-review textarea { padding: 15px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; color: white; outline: none; min-height: 100px; }
+        
+        @media (max-width: 768px) {
+            .product-layout { flex-direction: column; }
+            .product-main-img { height: 300px; }
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="container header__inner">
+        <a href="index.html" class="header__logo">Dr. Brezel <span>Gourmet</span></a>
+        <nav class="header__nav">
+            <a href="catalog.html">Коллекция</a>
+            <a href="about.html">О бренде</a>
+        </nav>
+        <div class="header__auth-buttons" id="auth-buttons" style="display: flex; gap: 15px; align-items: center;"></div>
+    </div>
+</header>
+
+    <main class="product-page">
+        <div class="product-layout">
+            <!-- Галерея -->
+            <div class="product-gallery">
+                <div class="product-main-img" id="main-img">ФОТО 1</div>
+                <div class="product-thumbs" id="thumbs">    
+                    <div class="product-thumb active" onclick="changeImg(1)">ФОТО 1</div>
+                    <div class="product-thumb" onclick="changeImg(2)">ФОТО 2</div>
+                    <div class="product-thumb" onclick="changeImg(3)">ФОТО 3</div>
+                    <div class="product-thumb" onclick="changeImg(4)">ФОТО 4</div>
+                    <div class="product-thumb" onclick="changeImg(5)">ФОТО 5</div>
+                </div>
+            </div>
+
+            <!-- Инфо -->
+            <div class="product-details">
+                <h1 id="product-name">Сыр Gourmet</h1>
+                <div class="product-price" id="product-price">1800 ₽</div>
+                <p class="product-desc" id="product-desc">Насыщенный вкус, премиальная линейка. Выдержка 12 месяцев. Идеален для сырной тарелки.</p>
+                
+                <div class="product-actions">
+                    <button class="btn" id="add-to-cart-btn">В корзину</button>
+                    <button class="btn-icon" id="favorite-btn" title="В избранное">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                    <button class="btn-icon" id="share-btn" title="Поделиться">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                    </button>
+                </div>
+
+                <!-- Отзывы -->
+                <div class="reviews-section">
+                    <h3 style="font-size: 28px; margin-bottom: 20px;">Отзывы</h3>
+                    <div id="reviews-list">
+                        <div class="review-card">
+                            <div class="review-header"><span>Иван</span><span>5.0</span></div>
+                            <div class="review-text">Отличный сыр, очень вкусный!</div>
+                        </div>
+                    </div>
+
+                    <h3 style="font-size: 20px; margin-top: 30px; margin-bottom: 15px;">Оставить отзыв</h3>
+                    <form class="add-review" id="review-form">
+                        <textarea id="review-text" placeholder="Ваш отзыв..."></textarea>
+                        <button type="submit" class="btn">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="js/product.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let currentImg = 1;
+        let autoScrollInterval = null;
+        let userInteracted = false;
+
+        const presentationEnabled = localStorage.getItem('presentation_mode') !== 'false';
+
+        function updateImg(num) {
+            currentImg = num;
+            const mainImg = document.getElementById('main-img');
+            if (!mainImg) return;
+            mainImg.textContent = 'ФОТО ' + num;
+            document.querySelectorAll('.product-thumb').forEach((t, i) => {
+                t.classList.toggle('active', i === num - 1);
+            });
+        }
+
+        function nextImg() {
+            if (userInteracted) return;
+            currentImg = currentImg >= 5 ? 1 : currentImg + 1;
+            updateImg(currentImg);
+        }
+
+        function startAutoScroll() {
+            if (!presentationEnabled) return;
+            autoScrollInterval = setInterval(nextImg, 3000);
+        }
+
+        function stopAutoScroll() {
+            if (autoScrollInterval) {
+                clearInterval(autoScrollInterval);
+                autoScrollInterval = null;
+            }
+        }
+
+        if (presentationEnabled) startAutoScroll();
+
+        document.querySelectorAll('.product-thumb').forEach((thumb, index) => {
+            thumb.addEventListener('click', () => {
+                userInteracted = true;
+                stopAutoScroll();
+                updateImg(index + 1);
+            });
+        });
+
+        // Очистка при уходе со страницы
+        window.addEventListener('beforeunload', () => {
+            if (autoScrollInterval) clearInterval(autoScrollInterval);
+        });
+    });
+</script>
+</body>
+</html>
