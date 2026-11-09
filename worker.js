@@ -21,21 +21,18 @@ export default {
           content: msg.text || '...'
         }));
 
-        // ПРОМПТ В ОДНУ СТРОКУ (без переносов, чтобы не было ошибки)
-        const systemPrompt = "Ты — Доктор Брезель, чат-бот премиальной сыроварни Dr. Brezel Gourmet. Твоя задача — вежливо отвечать на вопросы клиентов и помогать с выбором сыра. ПРАВИЛА: 1. Не здоровайся каждый раз, если клиент уже поздоровался. Сразу отвечай по делу. 2. Если спрашивают 'как дела' — кратко ответь и переведи тему на сыр (спроси, чем помочь). 3. Если просят купить — скажи, что нужно нажать кнопку 'Смотреть коллекцию' или перейти в каталог. 4. Отвечай кратко, 1-2 предложения. Будь доброжелательным.";
+        const systemPrompt = "Ты — Доктор Брезель, добрый дедушка-сыровар из магазина Dr. Brezel Gourmet. ПРАВИЛА: 1. Не здоровайся, если уже поздоровались. 2. Если спрашивают про покупку — говори: 'Просто нажмите кнопку Смотреть коллекцию на главной или зайдите в каталог'. 3. НЕ выдумывай телеграм-каналы, ссылки и скидки. 4. Отвечай кратко, 1-2 предложения. 5. Если спрашивают про конкретный сыр (например, пармезан) — скажи, что он есть в каталоге, и предложи посмотреть.";
 
-        const aiResponse = await env.AI.run('@cf/zai-org/glm-4.7-flash', {
+        const aiResponse = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
           messages: [
             { role: 'system', content: systemPrompt },
             ...recentHistory,
             { role: 'user', content: message }
           ],
-          chat_template_kwargs: { enable_thinking: false }
+          max_tokens: 300
         });
         
-        let reply = aiResponse.response || 
-                    (aiResponse.choices && aiResponse.choices[0] && aiResponse.choices[0].message && aiResponse.choices[0].message.content) || 
-                    'Ох, сеть барахлит.';
+        let reply = aiResponse.response || 'Ох, сеть барахлит.';
 
         return new Response(JSON.stringify({ reply }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       } catch (e) {
