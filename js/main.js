@@ -12,6 +12,7 @@ window.addEventListener('load', () => {
 const STICKER_CODES = [':wow:', ':think:', ':applause:', ':wink:', ':love:', ':laugh:', ':star:', ':cry:', ':cheese:', ':question:', ':typing:', ':wait:'];
 const STICKER_BG_SIZE = '300% 400%';
 const STICKER_IMG_PATH = 'assets/images/stickers.png';
+const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 let sessionId = 'user_' + Math.random().toString(36).substring(2, 9);
 let currentAbortController = null;
@@ -31,6 +32,7 @@ async function updateAuthUI() {
     }
 }
 
+// --- ГЕНЕРАЦИЯ КОНВЕЙЕРОВ ---
 function initHeroConveyors() {
     const visual = document.getElementById('hero-visual');
     if (!visual) return;
@@ -72,15 +74,131 @@ window.addEventListener('resize', () => {
     }, 500);
 });
 
+// --- ПЛАВАЮЩИЕ СЫРЫ ---
+function initHeroParticles() {
+    const container = document.getElementById('hero-particles');
+    if (!container) return;
+    const particleCount = 15;
+    const images = [
+        'assets/images/сыр1.png', 'assets/images/сыр2.png', 'assets/images/сыр3.png',
+        'assets/images/сыр4.png', 'assets/images/сыр5.png', 'assets/images/сыр6.png', 'assets/images/сыр7.png'
+    ];
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        const size = 40 + Math.random() * 60;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${100 + Math.random() * 20}%`;
+        const duration = 15 + Math.random() * 20;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.animationDelay = `-${Math.random() * duration}s`;
+        const randomImg = images[Math.floor(Math.random() * images.length)];
+        particle.style.backgroundImage = `url('${randomImg}')`;
+        particle.style.backgroundSize = 'contain';
+        particle.style.backgroundRepeat = 'no-repeat';
+        particle.style.backgroundPosition = 'center';
+        container.appendChild(particle);
+    }
+}
+
+// --- 3D КАРТОЧКИ ---
+function initEquipmentCards() {
+    const models = {
+        'model-1': 'assets/models/cheese_press.glb',
+        'model-2': 'assets/models/bath.glb',
+        'model-3': 'assets/models/stellage_kast.glb',
+        'model-4': 'assets/models/knife_collection.glb',
+        'model-5': 'assets/models/termometro.glb'
+    };
+    Object.keys(models).forEach(id => {
+        const container = document.getElementById(id);
+        if (!container) return;
+        const viewer = document.createElement('model-viewer');
+        viewer.setAttribute('src', models[id]);
+        viewer.setAttribute('alt', '3D модель');
+        viewer.setAttribute('auto-rotate', ''); 
+        viewer.setAttribute('shadow-intensity', '1');
+        viewer.setAttribute('exposure', '1');
+        container.appendChild(viewer);
+    });
+
+    const cards = document.querySelectorAll('.equip-card');
+    cards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (card.classList.contains('is-active')) {
+                cards.forEach(c => c.classList.remove('is-active', 'is-left', 'is-right'));
+                document.querySelectorAll('.equip-img model-viewer').forEach(m => {
+                    m.removeAttribute('camera-controls');
+                    m.setAttribute('auto-rotate', '');
+                });
+                return;
+            }
+            cards.forEach(c => c.classList.remove('is-active', 'is-left', 'is-right'));
+            document.querySelectorAll('.equip-img model-viewer').forEach(m => {
+                m.removeAttribute('camera-controls');
+                m.setAttribute('auto-rotate', '');
+            });
+            card.classList.add('is-active');
+            const activeViewer = card.querySelector('model-viewer');
+            if (activeViewer) {
+                activeViewer.setAttribute('camera-controls', '');
+                activeViewer.removeAttribute('auto-rotate');
+            }
+            const cardArray = Array.from(cards);
+            const activeIndex = cardArray.indexOf(card);
+            cardArray.forEach((c, index) => {
+                if (index < activeIndex) c.classList.add('is-left');
+                else if (index > activeIndex) c.classList.add('is-right');
+            });
+        });
+    });
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.equip-card')) {
+            cards.forEach(c => c.classList.remove('is-active', 'is-left', 'is-right'));
+            document.querySelectorAll('.equip-img model-viewer').forEach(m => {
+                m.removeAttribute('camera-controls');
+                m.setAttribute('auto-rotate', '');
+            });
+        }
+    });
+}
+
+// --- УМНЫЙ ТЕКСТОВЫЙ КОНВЕЙЕР ---
+function initTicker() {
+    const tickerInner = document.getElementById('ticker-inner');
+    if (!tickerInner) return;
+    tickerInner.innerHTML = '';
+    const words = ['🧀', 'Dr. Brezel Gourmet', '🧀', 'Премиальный сыр', '🧀', 'Ручная работа', '🧀', 'Выдержка', '🧀', 'Брецели'];
+    for (let i = 0; i < 4; i++) {
+        words.forEach(word => {
+            const span = document.createElement('span');
+            span.className = 'ticker__item';
+            span.textContent = word;
+            tickerInner.appendChild(span);
+        });
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-    }, { threshold: 0.15 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    if (REDUCED_MOTION) {
+        document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+    } else {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
     initHeroConveyors();
+    initHeroParticles();
+    initTicker();
+    setTimeout(initEquipmentCards, 300);
     updateAuthUI();
 });
 
+// --- ЧАТ ---
 const chatBtn = document.getElementById('chat-send');
 const chatInput = document.getElementById('chat-input');
 const messagesContainer = document.getElementById('chat-messages');
@@ -155,21 +273,18 @@ function sendSticker(code, sender) {
     }
 }
 
-// --- ФУНКЦИЯ ПЕЧАТНОЙ МАШИНКИ ---
 function typeWriter(element, text, speed = 20) {
     element.innerHTML = '';
     const html = marked.parse(text);
     let i = 0;
-    
     return setInterval(() => {
         if (i >= html.length) {
             clearInterval(typingInterval);
-            element.innerHTML = html; // Вставляем окончательный вариант
+            element.innerHTML = html;
             return;
         }
-        // Обрезаем и парсим, чтобы браузер не ломался на незакрытых тегах
         element.innerHTML = html.substring(0, i) + '█';
-        i += 3; // Скорость (3 символа за тик)
+        i += 3;
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }, speed);
 }
@@ -179,7 +294,6 @@ async function getBotResponse(text) {
     const typingWrapper = document.createElement('div');
     typingWrapper.className = 'msg-wrapper bot';
     typingWrapper.id = typingId;
-    
     typingWrapper.innerHTML = `<div class="msg" style="display: flex; align-items: center; gap: 8px; padding: 12px 20px;"><span style="color: #aaa; font-size: 14px;">Доктор Брезель печатает</span><span class="typing-dots"><span>.</span><span>.</span><span>.</span></span></div>`;
     messagesContainer.appendChild(typingWrapper);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -203,37 +317,26 @@ async function getBotResponse(text) {
 
         const chatData = await chatResponse.json();
         const reply = chatData.reply || 'Доктор задумался.';
-        
         document.getElementById(typingId)?.remove();
 
-        // Создаем финальное сообщение
         const finalMsgWrapper = document.createElement('div');
         finalMsgWrapper.className = 'msg-wrapper bot';
         finalMsgWrapper.innerHTML = `<div class="msg"></div><div class="msg-meta"><span>${new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</span></div>`;
         messagesContainer.appendChild(finalMsgWrapper);
-        
         const msgElement = finalMsgWrapper.querySelector('.msg');
-        
-        // Ищем стикеры
+
         const foundStickers = STICKER_CODES.filter(code => reply.includes(code));
         let textReply = reply;
         foundStickers.forEach(code => { textReply = textReply.replace(code, '').trim(); });
 
-        // Запускаем печать
-        if (textReply) {
-            typingInterval = typeWriter(msgElement, textReply, 15);
-        }
-
+        if (textReply) typingInterval = typeWriter(msgElement, textReply, 15);
         foundStickers.forEach(code => { setTimeout(() => addMessage(code, 'bot', true), 500); });
         saveHistory();
 
     } catch (error) {
         document.getElementById(typingId)?.remove();
-        if (error.name === 'AbortError') {
-            addMessage('Вы остановили ответ Доктора.', 'bot');
-        } else {
-            addMessage('Ошибка связи.', 'bot');
-        }
+        if (error.name === 'AbortError') addMessage('Вы остановили ответ Доктора.', 'bot');
+        else addMessage('Ошибка связи.', 'bot');
     } finally {
         chatInput.disabled = false;
         chatBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>';
@@ -253,14 +356,11 @@ async function processQueue() {
 
 async function sendMessage() {
     const text = chatInput.value.trim();
-    
-    // Если бот печатает или ждет — останавливаем
     if (currentAbortController) {
         currentAbortController.abort();
         if (typingInterval) clearInterval(typingInterval);
         return;
     }
-
     if (!text) return;
     chatInput.value = '';
     addMessage(text, 'user');
@@ -284,34 +384,27 @@ document.getElementById('clear-chat-btn')?.addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', async () => {
     const callHumanBtn = document.getElementById('call-human-btn');
     if (!callHumanBtn) return;
-
     const { data: { session } } = await supabase.auth.getSession();
-
     if (!session) {
         callHumanBtn.addEventListener('click', () => {
             addMessage("Чтобы связаться с менеджером, пожалуйста, войдите в аккаунт.", 'bot');
         });
         return;
     }
-
     callHumanBtn.addEventListener('click', async () => {
         const userQuestion = prompt("Опишите ваш вопрос, и менеджер ответит в течение 15 минут:");
         if (!userQuestion) return;
-
         addMessage(userQuestion, 'user');
-        
         try {
-            await fetch('https://drbrezel.ru/api/support', {
+            await fetch('https://drbrezel-site-main.layero.app/api/support', {
                 method: 'POST',
                 body: JSON.stringify({ message: userQuestion, sessionId: sessionId, userEmail: session.email })
             });
         } catch (e) {}
-
         addMessage("Секунду, я передаю ваш вопрос старшему менеджеру...", 'bot');
     });
 });
 
-// --- БУРГЕР ---
 document.addEventListener('DOMContentLoaded', () => {
     const burgerBtn = document.getElementById('burger-btn');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -322,68 +415,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
-// --- BREZEL'S GUARD: VPN DETECTOR ---
-async function checkVPN() {
-    try {
-        // Если у тебя нет токена ipinfo, просто убери ?token=...
-        const res = await fetch('https://ipinfo.io/json'); 
-        const data = await res.json();
-        
-        const org = (data.org || '').toLowerCase();
-        // Проверяем, похоже ли соединение на VPN или хостинг
-        const isVpn = org.includes('vpn') || org.includes('proxy') || org.includes('hosting') || org.includes('cloud') || org.includes('amazon') || org.includes('digitalocean');
-        
-        if (isVpn) {
-            showVpnWarning();
-        }
-    } catch (e) {
-        console.log('Ошибка проверки VPN (пропускаем):', e);
-    }
-}
-
-function showVpnWarning() {
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
-    if (isMobile) {
-        // Пульсирующая кнопка (Мобилка)
-        const btn = document.createElement('div');
-        btn.innerHTML = '🛡️';
-        btn.style.cssText = `
-            position: fixed; bottom: 20px; left: 20px; z-index: 99999;
-            width: 50px; height: 50px; background: #FFA600; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 24px; cursor: pointer; box-shadow: 0 0 0 0 rgba(255, 166, 0, 0.7);
-            animation: pulseVpn 2s infinite;
-        `;
-        btn.onclick = () => {
-            alert('Уважаемый пользователь! Для стабильной работы сайта, пожалуйста, отключите VPN. Некоторые мобильные операторы блокируют запросы.');
-            btn.remove();
-        };
-        document.body.appendChild(btn);
-    } else {
-        // Полоса снизу (ПК)
-        const bar = document.createElement('div');
-        bar.style.cssText = `
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #FFA600; color: #000; text-align: center;
-            padding: 12px; font-weight: 600; z-index: 99999;
-            font-family: var(--font-body); font-size: 14px;
-        `;
-        bar.innerHTML = '⚠️ Похоже, вы используете VPN. Для корректной работы чата и корзины, пожалуйста, отключите его.';
-        document.body.appendChild(bar);
-    }
-}
-
-// Добавляем анимацию пульсации
-const style = document.createElement('style');
-style.innerHTML = `
-    @keyframes pulseVpn {
-        0% { box-shadow: 0 0 0 0 rgba(255, 166, 0, 0.7); }
-        70% { box-shadow: 0 0 0 15px rgba(255, 166, 0, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(255, 166, 0, 0); }
-    }
-`;
-document.head.appendChild(style);
-
-setTimeout(checkVPN, 2000);
