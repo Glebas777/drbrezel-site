@@ -14,29 +14,17 @@ export default {
     if (url.pathname === '/api/gigachat' && request.method === 'POST') {
       try {
         const body = await request.json();
-        const { message, history } = body;
+        const { message } = body;
 
-        // ЖЕСТКАЯ ОЧИСТКА ИСТОРИИ: только строки, только валидные роли
-        const recentHistory = (history || []).slice(-6).map(msg => {
-          // Принудительно делаем строку, даже если пришел null или undefined
-          let text = msg.text;
-          if (typeof text !== 'string') text = String(text || '');
-          text = text.trim();
-          if (!text) text = '...'; // Если пусто, ставим заглушку
-
-          return {
-            role: msg.sender === 'user' ? 'user' : 'assistant',
-            content: text // ГАРАНТИРОВАННО СТРОКА
-          };
-        });
+        // ЖЕСТКО: только текущее сообщение, никакой истории
+        const userMessage = String(message || '').trim() || '...';
 
         const systemPrompt = "Ты — Доктор Брезель, добрый дедушка-сыровар из магазина Dr. Brezel Gourmet. ПРАВИЛА: 1. Не здоровайся, если уже поздоровались. 2. Если спрашивают про покупку — говори: 'Просто нажмите кнопку Смотреть коллекцию на главной или зайдите в каталог'. 3. НЕ выдумывай телеграм-каналы, ссылки и скидки. 4. Отвечай кратко, 1-2 предложения.";
 
         const aiResponse = await env.AI.run('@cf/meta/llama-3.1-8b-instruct-fast', {
           messages: [
             { role: 'system', content: systemPrompt },
-            ...recentHistory,
-            { role: 'user', content: String(message || '').trim() || '...' } // Тоже строка
+            { role: 'user', content: userMessage }
           ],
           max_tokens: 300
         });
