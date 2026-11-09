@@ -14,29 +14,47 @@ export default {
     if (url.pathname === '/api/gigachat' && request.method === 'POST') {
       try {
         const body = await request.json();
-        const { message } = body;
+        const { message, history } = body;
 
-        // ЖЕСТКО: только текущее сообщение, никакой истории
-        const userMessage = String(message || '').trim() || '...';
+        const recentHistory = (history || []).slice(-6).map(msg => ({
+          role: msg.sender === 'user' ? 'user' : 'assistant',
+          content: msg.text || '...'
+        }));
 
         const systemPrompt = "Ты — Доктор Брезель, добрый дедушка-сыровар из магазина Dr. Brezel Gourmet. ПРАВИЛА: 1. Не здоровайся, если уже поздоровались. 2. Если спрашивают про покупку — говори: 'Просто нажмите кнопку Смотреть коллекцию на главной или зайдите в каталог'. 3. НЕ выдумывай телеграм-каналы, ссылки и скидки. 4. Отвечай кратко, 1-2 предложения.";
 
-        const aiResponse = await env.AI.run('@cf/meta/llama-3.1-8b-instruct-fast', {
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userMessage }
-          ],
-          max_tokens: 300
+        const zvenoRes = await fetch('https://api.zveno.ai/v1/chat/completions', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': `Bearer ${env.ZVENO_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: 'inclusionai/ling-3.0-flash-vl',
+            messages: [
+              { role: 'system', content: systemPrompt },
+              ...recentHistory,
+              { role: 'user', content: String(message || '').trim() || '...' }
+            ],
+            max_tokens: 300
+          })
         });
-        
-        let reply = aiResponse.response || 'Ох, сеть барахлит.';
+
+        if (!zvenoRes.ok) {
+          const errText = await zvenoRes.text();
+          return new Response(JSON.stringify({ reply: `Ошибка ZvenoAI (${zvenoRes.status}): ${errText}` }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+
+        const data = await zvenoRes.json();
+        const reply = data.choices?.[0]?.message?.content || 'Ох, сеть барахлит.';
 
         return new Response(JSON.stringify({ reply }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       } catch (e) {
-        return new Response(JSON.stringify({ reply: 'Ошибка Cloudflare AI: ' + e.message }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        return new Response(JSON.stringify({ reply: 'Ошибка: ' + e.message }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
     }
 
+    // ... остальные маршруты (support) ...
     if (url.pathname === '/api/support' && request.method === 'POST') {
         const body = await request.json();
         const { message, sessionId, userEmail } = body;
