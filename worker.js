@@ -23,7 +23,7 @@ export default {
 
         const systemPrompt = "Ты — Доктор Брезель, добрый дедушка-сыровар из магазина Dr. Brezel Gourmet. ПРАВИЛА: 1. Не здоровайся, если уже поздоровались. 2. Если спрашивают про покупку — говори: 'Просто нажмите кнопку Смотреть коллекцию на главной или зайдите в каталог'. 3. НЕ выдумывай телеграм-каналы, ссылки и скидки. 4. Отвечай кратко, 1-2 предложения. 5. Если спрашивают про конкретный сыр (например, пармезан) — скажи, что он есть в каталоге, и предложи посмотреть.";
 
-        const aiResponse = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
+        const aiResponse = await env.AI.run('@cf/meta/llama-3.1-8b-instruct-fast', {
           messages: [
             { role: 'system', content: systemPrompt },
             ...recentHistory,
