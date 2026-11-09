@@ -11,6 +11,8 @@
     
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>   
+    <!-- ПОДКЛЮЧАЕМ 3D (model-viewer) -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
     
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
@@ -45,9 +47,9 @@
 <main>
     <!-- HERO -->
     <section class="hero">
-
+        <!-- НОВЫЙ БЛОК: Плавающие сыры -->
         <div id="hero-particles" class="hero__particles"></div>
-        
+
         <div class="container">
             <div class="hero__content reveal">
                 <h1 class="hero__title">Сыр, которым<br><span class="dynamic-word" id="dynamic-word">восхищаются</span></h1>
@@ -66,16 +68,12 @@
     <!-- ДОКТОР БРЕЗЕЛЬ -->
     <section class="doctor-section">
         <div class="container doctor__inner">
-            
-            <!-- ЛЕВАЯ ЧАСТЬ: ФОТО -->
             <div class="doctor__image-wrap reveal">
                 <div class="doctor__glow"></div>
                 <div class="doctor__image-placeholder">
                     <span>[Место под фото<br>Доктора Брезеля]</span>
                 </div>
             </div>
-
-            <!-- ПРАВАЯ ЧАСТЬ: ТЕКСТ И ЧАТ -->
             <div class="doctor__content reveal" style="transition-delay: 0.2s;">
                 <h2 class="doctor__quote">«Сыр, который не пахнет семечкой — это не сыр. Это экстракт. А я делаю <span>настоящий</span> сыр.»</h2>
                 <p class="card__text" style="margin-bottom: 30px; color: var(--text-muted); font-size: 18px;">Доктор Брезель лично следит за каждой головкой. Задайте ему любой вопрос.</p>
@@ -94,7 +92,10 @@
                     </div>
                     
                     <div id="chat-messages" class="chat-messages">
-                        <!-- Сообщения -->
+                        <div class="msg-wrapper bot">
+                            <div class="msg">Здравствуй, путник! Я Доктор Брезель. Спрашивай про сыр, не стесняйся.</div>
+                            <div class="msg-meta"><span>Только что</span></div>
+                        </div>
                     </div>
 
                     <div id="stickers-panel" class="stickers-panel"></div>
@@ -125,9 +126,7 @@
             
             <!-- Карточка 1 -->
             <div class="equip-card">
-                <div class="equip-img" id="model-1">
-                    <!-- Сюда вставим 3D -->
-                </div>
+                <div class="equip-img" id="model-1"></div>
                 <div class="equip-content">
                     <h3>Ручной пресс</h3>
                     <p>Используется для формирования головок сыра. Позволяет регулировать давление вручную.</p>
@@ -198,10 +197,7 @@
         </div>
     </section>
 
-    <!-- Подключаем скрипт для 3D-моделей -->
-    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
-
-    <!-- СЕКЦИЯ ПОДПИСКИ (ВМЕСТО ЗАЯВКИ) -->
+    <!-- СЕКЦИЯ ПОДПИСКИ -->
     <section id="subscribe" class="container" style="padding: 120px 0; text-align: center;">
         <h2 class="reveal" style="font-size: 56px; margin-bottom: 20px;">Клуб гурманов</h2>
         <p class="reveal" style="color: var(--text-muted); margin-bottom: 40px; font-size: 18px; max-width: 600px; margin-left: auto; margin-right: auto;">
@@ -215,7 +211,7 @@
     </section>
 </main>
 
-<!-- НОВЫЙ КРАСИВЫЙ ФУТЕР -->
+<!-- КРАСИВЫЙ ФУТЕР -->
 <footer style="padding: 80px 0 40px; border-top: 1px solid var(--border); background: #0A0A0A;">
     <div class="container">
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 60px;">
@@ -227,15 +223,12 @@
                     Премиальный сыр и брецели ручной работы. Сделано с душой, выдержано со временем.
                 </p>
                 <div style="display: flex; gap: 15px;">
-                    <!-- ВК -->
                     <a href="https://vk.ru/drbrezelgourmet" target="_blank" aria-label="ВКонтакте" style="color: var(--text-main); transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-main)'">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.785 16.241s.288-.032.436-.191c.136-.146.132-.42.132-.42s-.02-1.283.576-1.472c.588-.186 1.342 1.241 2.142 1.789.606.414 1.065.323 1.065.323l2.142-.03s1.12-.069.589-.949c-.044-.072-.31-.652-1.596-1.848-1.345-1.254-1.164-1.051.455-3.22.986-1.321 1.38-2.128 1.257-2.473-.117-.328-.84-.241-.84-.241l-2.41.015s-.179-.025-.311.055c-.13.078-.213.26-.213.26s-.381 1.015-.889 1.879c-1.071 1.823-1.5 1.919-1.674 1.806-.406-.263-.304-1.059-.304-1.624 0-1.765.267-2.501-.52-2.691-.261-.063-.454-.104-1.124-.111-.86-.009-1.588.003-1.999.206-.274.135-.485.436-.356.453.159.021.519.097.709.356.246.334.237 1.085.237 1.085s.142 2.077-.33 2.334c-.323.176-.767-.183-1.719-1.824-.488-.846-.856-1.781-.856-1.781s-.071-.174-.198-.267c-.153-.113-.367-.149-.367-.149l-2.287.015s-.343.01-.469.159c-.112.132-.009.406-.009.406s1.792 4.192 3.822 6.303c1.86 1.933 3.972 1.806 3.972 1.806h.957z"/></svg>
                     </a>
-                    <!-- Telegram -->
                     <a href="https://t.me/drbrezelgourmet" target="_blank" aria-label="Telegram" style="color: var(--text-main); transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-main)'">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
                     </a>
-                    <!-- Instagram -->
                     <a href="https://www.instagram.com/drbrezelgourmet" target="_blank" aria-label="Instagram" style="color: var(--text-main); transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-main)'">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
                     </a>
