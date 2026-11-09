@@ -195,7 +195,7 @@ async function getBotResponse(text) {
     currentAbortController = new AbortController();
 
     try {
-        const chatResponse = await fetch('https://drbrezel.ru/api/gigachat', {
+        const chatResponse = await fetch('https://drbrezel-site-main.layero.app/api/gigachat', {
             method: 'POST',
             body: JSON.stringify({ message: text, sessionId: sessionId, history: history }),
             signal: currentAbortController.signal
